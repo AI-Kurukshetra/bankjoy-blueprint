@@ -3,7 +3,9 @@
 import { cookies } from "next/headers";
 import { redirect } from "next/navigation";
 
+import { submitTransferAction } from "@/app/(dashboard)/actions";
 import { DEMO_SESSION_COOKIE } from "@/lib/session";
+import { getAuthenticatedRedirectPath, getMfaState } from "@/lib/mfa";
 import { hasSupabaseEnv } from "@/lib/supabase/env";
 import { createClient } from "@/lib/supabase/server";
 import {
@@ -34,6 +36,11 @@ export async function loginAction(formData: FormData) {
     if (error) {
       redirect(`/login?error=${encodeURIComponent(error.message)}`);
     }
+
+    const { data: assurance } = await supabase.auth.mfa.getAuthenticatorAssuranceLevel();
+    const mfaState = getMfaState(assurance?.currentLevel ?? null, assurance?.nextLevel ?? null);
+
+    redirect(getAuthenticatedRedirectPath(mfaState));
   } else {
     const cookieStore = await cookies();
     cookieStore.set(
@@ -44,6 +51,7 @@ export async function loginAction(formData: FormData) {
         fullName: parsed.data.email.includes("admin") ? "Operations Manager" : "Account Holder",
         role: parsed.data.email.includes("admin") ? "admin" : "member",
         mode: "demo",
+        mfa: getMfaState(null, null),
       }),
       { httpOnly: true, path: "/", sameSite: "lax" },
     );
@@ -93,6 +101,7 @@ export async function signupAction(formData: FormData) {
         fullName: parsed.data.fullName ?? "Account Holder",
         role: "member",
         mode: "demo",
+        mfa: getMfaState(null, null),
       }),
       { httpOnly: true, path: "/", sameSite: "lax" },
     );
@@ -181,40 +190,5 @@ export async function updatePasswordAction(formData: FormData) {
 }
 
 export async function transferAction(formData: FormData) {
-  const parsed = transferSchema.safeParse({
-    fromAccountId: formData.get("fromAccountId"),
-    toAccountId: formData.get("toAccountId"),
-    amount: formData.get("amount"),
-    memo: formData.get("memo"),
-  });
-
-  if (!parsed.success) {
-    redirect(`/dashboard/transfers?error=${encodeURIComponent(parsed.error.issues[0]?.message ?? "Transfer failed.")}`);
-  }
-
-  if (hasSupabaseEnv()) {
-    const supabase = await createClient();
-    const { error } = await supabase.rpc("submit_internal_transfer", {
-      p_from_account_id: parsed.data.fromAccountId,
-      p_to_account_id: parsed.data.toAccountId,
-      p_amount_cents: Math.round(parsed.data.amount * 100),
-      p_memo: parsed.data.memo ?? null,
-    });
-
-    if (error) {
-      redirect(`/dashboard/transfers?error=${encodeURIComponent(error.message)}`);
-    }
-  } else {
-    await recordDemoTransfer({
-      id: `trf-${crypto.randomUUID()}`,
-      fromAccountId: parsed.data.fromAccountId,
-      toAccountId: parsed.data.toAccountId,
-      amountCents: Math.round(parsed.data.amount * 100),
-      memo: parsed.data.memo ?? "",
-      status: "completed",
-      createdAt: new Date().toISOString(),
-    });
-  }
-
-  redirect("/dashboard/transfers?success=1");
+  await submitTransferAction(formData);
 }

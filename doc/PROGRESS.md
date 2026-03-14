@@ -19,3 +19,13 @@
 [2026-03-14 14:27] codex — Updated the admin email screen so the password reset message is shown as rendered email content alongside the copy-paste HTML source.
 [2026-03-14 14:40] codex — Fixed password recovery compatibility so reset links landing on `/reset-password/update` with recovery params are handed off to `/auth/confirm` and completed server-side.
 [2026-03-14 14:52] codex — Added the accounts workspace, statement downloads, a live `statements` table + seed data, and secure CSV statement exports for the seeded accounts.
+[2026-03-14 15:04] codex — Marked the next Phase 2 auth expansion task as blocked because the required MFA-vs-OAuth priority decision is not documented.
+[2026-03-14 15:14] codex — Added TOTP MFA enrollment and verification flows, enforced MFA redirects after password login, introduced a dashboard security center, and verified lint, typecheck, and tests.
+[2026-03-14 15:18] codex — Added external account linking with a new `external_accounts` migration, masked-detail storage, demo/live linking flows, accounts-page UI, and passing lint, typecheck, and tests.
+[2026-03-14 15:25] codex — Added external and scheduled transfers with a transfer-rail migration, scheduled/pending statuses, a new unified transfer server action, refreshed transfer UI, and passing lint, typecheck, and tests.
+[2026-03-14 15:28] codex — Added bill payments with a new `bill_payments` migration, live/demo submission flows, a dedicated payments dashboard page, and passing lint, typecheck, and tests.
+[2026-03-14 15:31] codex — Strengthened admin alerts and security handling with categorized alert summaries, a prioritized triage queue, and Phase 2 completion-level verification via lint, typecheck, and tests.
+[2026-03-14 16:13] codex — Fixed MFA QR rendering on `/dashboard/security` by trimming and encoding raw SVG/data URL payloads before passing them to `next/image`, then re-ran lint, typecheck, and tests.
+[2026-03-14 16:35] codex — Added Playwright demo smoke tests for member/admin browser flows, forced the E2E web server into demo mode, fixed desktop sidebar overflow so logout remains reachable, and verified lint, typecheck, and Playwright passes.
+[2026-03-14 16:43] codex — Expanded demo Playwright coverage to assert notification visibility and transaction search/filter behavior, and confirmed notifications are server-refreshed rather than true realtime subscriptions.
+[2026-03-14 16:55] codex — Re-ran lint, typecheck, unit tests, and Playwright demo smoke coverage on the full Phase 2 change set before committing and pushing.

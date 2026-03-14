@@ -3,20 +3,34 @@
 import Link from "next/link";
 import { ArrowDownLeft, ArrowUpRight, Download, FileText, Landmark } from "lucide-react";
 
+import { ExternalAccountLinker } from "@/components/dashboard/external-account-linker";
 import { Badge } from "@/components/ui/badge";
 import { Card } from "@/components/ui/card";
 import type { ManagedAccount } from "@/lib/bank-data";
 import type { Transaction } from "@/lib/demo-bank-data";
+import type { ExternalAccountRecord } from "@/lib/external-accounts";
 import type { StatementRecord } from "@/lib/statements";
 import { formatCurrency, formatDate, formatRelativeDate } from "@/lib/utils";
 
 type AccountManagementProps = {
+  action: (formData: FormData) => void;
   accounts: ManagedAccount[];
+  error?: string;
+  externalAccounts: ExternalAccountRecord[];
+  message?: string;
   statements: StatementRecord[];
   transactions: Transaction[];
 };
 
-export function AccountManagement({ accounts, statements, transactions }: AccountManagementProps) {
+export function AccountManagement({
+  action,
+  accounts,
+  error,
+  externalAccounts,
+  message,
+  statements,
+  transactions,
+}: AccountManagementProps) {
   const totalBalanceCents = accounts.reduce((sum, account) => sum + account.balanceCents, 0);
 
   return (
@@ -66,6 +80,13 @@ export function AccountManagement({ accounts, statements, transactions }: Accoun
           </div>
         </Card>
       </section>
+
+      <ExternalAccountLinker
+        action={action}
+        error={error}
+        externalAccounts={externalAccounts}
+        message={message}
+      />
 
       <section className="grid gap-6">
         {accounts.map((account) => {

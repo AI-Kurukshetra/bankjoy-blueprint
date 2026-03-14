@@ -36,10 +36,14 @@
 - `id` uuid primary key
 - `user_id` uuid references auth.users(id)
 - `from_account_id` uuid references accounts(id)
-- `to_account_id` uuid references accounts(id)
+- `to_account_id` uuid nullable references accounts(id)
+- `external_account_id` uuid nullable references external_accounts(id)
+- `transfer_rail` text
 - `amount_cents` bigint
 - `memo` text
 - `status` text
+- `scheduled_for` date nullable
+- `processed_at` timestamptz nullable
 - `created_at` timestamptz
 
 ### `notifications`
@@ -64,6 +68,31 @@
 - `status` text
 - `file_name` text
 - `generated_at` timestamptz
+- `created_at` timestamptz
+
+### `external_accounts`
+- `id` uuid primary key
+- `user_id` uuid references auth.users(id)
+- `institution_name` text
+- `account_name` text
+- `account_type` text
+- `status` text
+- `routing_number_masked` text
+- `account_number_masked` text
+- `last_sync_at` timestamptz
+- `created_at` timestamptz
+
+### `bill_payments`
+- `id` uuid primary key
+- `user_id` uuid references auth.users(id)
+- `from_account_id` uuid references accounts(id)
+- `payee_name` text
+- `payee_category` text
+- `amount_cents` bigint
+- `status` text
+- `deliver_by` date
+- `memo` text nullable
+- `processed_at` timestamptz nullable
 - `created_at` timestamptz
 
 ## Planned Optional Phase 1 Table
@@ -93,6 +122,22 @@
   - Enables RLS and adds member/admin read access through `public.is_admin()`
   - Adds an account/time index for statement retrieval
   - Seeds 4 statement rows for the existing seeded member accounts
+- `supabase/migrations/20260314153000_add_external_accounts.sql`
+  - Creates `external_accounts`
+  - Enables RLS with member-owned insert/select and admin visibility through `public.is_admin()`
+  - Adds a user/time index for linked-account retrieval
+  - Seeds 2 external account rows for the existing member data
+- `supabase/migrations/20260314154500_expand_transfers_for_external_and_scheduled.sql`
+  - Expands `transfers` for external destinations and scheduled execution metadata
+  - Adds destination-shape checks for internal vs external rails
+  - Adds `public.submit_transfer()` to handle internal completion, external pending review, and scheduled transfer creation
+  - Seeds 2 additional transfer rows to demonstrate external pending-review and scheduled transfer states
+- `supabase/migrations/20260314160000_add_bill_payments.sql`
+  - Creates `bill_payments`
+  - Enables RLS with member-owned insert/select and admin visibility through `public.is_admin()`
+  - Adds a due-date index for bill-pay retrieval
+  - Adds `public.submit_bill_payment()` to handle immediate and scheduled bill payments
+  - Seeds 2 bill payment rows to demonstrate paid and scheduled states
 
 ## Seeded Demo Users
 - `admin@bankjoy.demo` — role `admin`

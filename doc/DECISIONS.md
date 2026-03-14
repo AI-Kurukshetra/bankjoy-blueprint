@@ -41,3 +41,27 @@
   - Rationale: the app should not depend on one exact hosted email template shape just to complete a reset; recovery handoff should be resilient to both supported link styles.
 - Statement downloads are generated on demand from statement metadata plus the account ledger instead of linking to static files.
   - Rationale: the MVP can provide a real account-download flow without depending on storage uploads or pre-generated documents, while still enforcing session-based access control.
+- Phase 2 multi-factor auth is implemented as TOTP authenticator-app MFA, not OAuth.
+  - Rationale: the user explicitly prioritized MFA, and Supabase Auth already provides a direct TOTP factor flow that fits the existing email/password login without introducing provider-specific OAuth configuration.
+- MFA is enforced with a post-password `/mfa` verification step whenever the active session can be promoted from `aal1` to `aal2`.
+  - Rationale: this keeps the dashboard route protection centralized and aligns the app flow with Supabase Authenticator Assurance Levels instead of inventing parallel app-side MFA state.
+- External account linking stores only masked routing and account numbers in the MVP database.
+  - Rationale: the hackathon flow needs a credible linked-account experience for later transfer features, but it should avoid pretending to be a full aggregator or persisting sensitive bank credentials.
+- External account linking is surfaced directly inside the existing accounts workspace rather than as a standalone area.
+  - Rationale: users already manage balances and statements there, so linked-account setup fits naturally into the account-management flow and keeps the next transfer phase adjacent to the data it depends on.
+- External transfers do not immediately mutate balances in the MVP; they enter `pending_review` unless scheduled for a future date.
+  - Rationale: this preserves a believable external-transfer workflow without pretending the app has a settlement engine or ACH processing backend.
+- Scheduled transfers and pending external transfers are represented directly in the `transfers` table instead of a separate jobs table.
+  - Rationale: the MVP only needs one visible transfer ledger for customers and admins, and a unified transfer record keeps the UI and demo data much simpler.
+- Bill payments use a dedicated `bill_payments` ledger instead of being folded into the transfer records.
+  - Rationale: payee-focused bill workflows need different metadata from account-to-account transfers, and keeping them separate makes the payments UI and future admin review much clearer.
+- Immediate bill payments deduct the selected account balance, while future-dated bill payments stay scheduled.
+  - Rationale: this matches the transfer model already in the app and gives the MVP a clear distinction between posted money movement and future intent.
+- Admin monitoring groups alerts into security, transfer, payment, profile, and system categories before rendering the queue.
+  - Rationale: the raw alert feed had become too flat once MFA, external linking, transfers, and bill pay were all added; operators need summarized categories to triage effectively during the demo.
+- MFA QR codes are normalized in a shared helper before rendering with `next/image`.
+  - Rationale: Supabase MFA enrollment can return raw SVG text or `data:image/svg+xml` values with trailing whitespace and unencoded XML, which Next.js rejects unless the payload is trimmed and URL-encoded.
+- Playwright demo smoke tests run against a local app process with the public Supabase env vars overridden to empty strings.
+  - Rationale: the browser smoke suite is intended to validate the repo's demo-mode user journeys deterministically, without depending on whichever live Supabase credentials may exist in the local shell or `.env` files.
+- Notification coverage is currently validated as fetch/refresh behavior, not true realtime delivery.
+  - Rationale: there is no client-side subscription code for notifications in the repository today, so tests should assert the implemented server-render refresh behavior and track websocket-style live notifications as a separate follow-up task.

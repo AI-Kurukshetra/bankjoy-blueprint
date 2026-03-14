@@ -1,6 +1,6 @@
 import type { Metadata } from "next";
 
-import { transferAction } from "@/app/(auth)/actions";
+import { submitTransferAction } from "@/app/(dashboard)/actions";
 import { TransferForm } from "@/components/dashboard/transfer-form";
 import { Card } from "@/components/ui/card";
 import { getBankingSnapshot } from "@/lib/bank-data";
@@ -28,7 +28,13 @@ export default async function TransfersPage({
     <div className="space-y-6">
       {success ? (
         <Card className="border-surge/25 bg-surge/10">
-          <p className="text-sm font-medium text-surge">Transfer completed successfully. Your account activity has been updated.</p>
+          <p className="text-sm font-medium text-surge">
+            {success === "scheduled"
+              ? "Transfer scheduled successfully. It now appears in your transfer activity."
+              : success === "pending_review"
+                ? "External transfer submitted. It is now pending review."
+                : "Transfer completed successfully. Your account activity has been updated."}
+          </p>
         </Card>
       ) : null}
       {error ? (
@@ -36,7 +42,12 @@ export default async function TransfersPage({
           <p className="text-sm font-medium text-ember">{error}</p>
         </Card>
       ) : null}
-      <TransferForm accounts={snapshot.accounts} action={transferAction} transfers={snapshot.transfers} />
+      <TransferForm
+        accounts={snapshot.accounts}
+        action={submitTransferAction}
+        externalAccounts={snapshot.externalAccounts}
+        transfers={snapshot.transfers}
+      />
     </div>
   );
 }

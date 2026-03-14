@@ -2,7 +2,7 @@
 
 import Link from "next/link";
 import { usePathname } from "next/navigation";
-import { Bell, CreditCard, Landmark, LayoutDashboard, RefreshCw, ShieldCheck, Sparkles, Wallet } from "lucide-react";
+import { Bell, CreditCard, Landmark, LayoutDashboard, Receipt, RefreshCw, Shield, ShieldCheck, Sparkles, Wallet } from "lucide-react";
 
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
@@ -22,6 +22,8 @@ const navigation = [
   { href: "/dashboard/accounts", label: "Accounts", icon: Wallet },
   { href: "/dashboard/transactions", label: "Transactions", icon: CreditCard },
   { href: "/dashboard/transfers", label: "Transfers", icon: RefreshCw },
+  { href: "/dashboard/payments", label: "Payments", icon: Receipt },
+  { href: "/dashboard/security", label: "Security", icon: Shield },
   { href: "/dashboard/admin", label: "Admin", icon: ShieldCheck },
 ];
 
@@ -32,7 +34,7 @@ export function AppShell({ children, notifications, session, logoutAction }: App
   return (
     <div className="app-grid min-h-screen">
       <div className="mx-auto grid min-h-screen w-full max-w-[1680px] gap-6 px-4 py-5 xl:grid-cols-[290px_minmax(0,1fr)_360px] xl:px-6 2xl:px-8">
-        <aside className="rounded-[34px] border border-white/70 bg-ink p-6 text-white shadow-panel xl:sticky xl:top-5 xl:h-[calc(100vh-2.5rem)]">
+        <aside className="rounded-[34px] border border-white/70 bg-ink p-6 text-white shadow-panel xl:sticky xl:top-5 xl:h-[calc(100vh-2.5rem)] xl:overflow-y-auto">
           <div className="flex h-full flex-col gap-6">
             <div>
               <p className="font-mono text-xs uppercase tracking-[0.28em] text-white/55">Bankjoy</p>

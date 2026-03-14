@@ -37,3 +37,22 @@
 - Added `supabase/migrations/20260314145000_add_statements_and_account_downloads.sql` to create the `statements` table, add RLS, and seed statement metadata for the existing accounts.
 - Added an `Accounts` dashboard route with account-level summaries, recent activity, and statement download controls.
 - Added `app/api/statements/[statementId]/route.ts` and `lib/statements.ts` to generate secure CSV statement downloads from account and transaction data.
+- Added TOTP MFA session-state helpers in `lib/mfa.ts` and enforced MFA-required redirects after password login and before protected dashboard routes render.
+- Added a dedicated `/mfa` verification route for step-up sign-in completion and a `/dashboard/security` route for authenticator-app enrollment and factor management.
+- Added browser-side Supabase MFA enrollment, verification, and unenrollment components plus unit tests for MFA redirect logic.
+- Added `supabase/migrations/20260314153000_add_external_accounts.sql` to create `external_accounts`, add RLS policies, and seed linked external-account rows for the existing member data.
+- Added `app/(dashboard)/actions.ts` and `components/dashboard/external-account-linker.tsx` to support masked external-account linking from the accounts workspace.
+- Extended the accounts data snapshot and demo cookie model to include linked external accounts, plus helper and validation tests for the new flow.
+- Added `supabase/migrations/20260314154500_expand_transfers_for_external_and_scheduled.sql` to expand transfers with external destinations, scheduling metadata, and a unified `submit_transfer()` function.
+- Reworked the transfers page and form to support internal vs external rails, future scheduling, and richer transfer-status messaging/history.
+- Updated demo and live transfer snapshot models so pending-review and scheduled transfers appear consistently in the UI without affecting balances until completion.
+- Added `supabase/migrations/20260314160000_add_bill_payments.sql` to create `bill_payments`, add RLS policies, and expose a `submit_bill_payment()` function with seeded data.
+- Added a dedicated bill-pay dashboard route at `/dashboard/payments` with creation and history UI plus a shared server action in `app/(dashboard)/actions.ts`.
+- Extended demo/live banking data with bill-payment records so scheduled and completed payments appear consistently and affect balances appropriately in demo mode.
+- Expanded the admin snapshot and monitor to categorize alert kinds, summarize security/transfer/payment counts, and prioritize high-severity events in a triage queue.
+- Updated demo and live alert mapping so external-account links, transfers, bill payments, and system/security events are visible through stronger admin-facing monitoring cards.
+- Moved MFA QR normalization into `lib/mfa.ts` and now trim plus URL-encode raw SVG payloads before rendering them with `next/image` on `/dashboard/security`.
+- Added MFA regression tests covering both raw SVG strings and existing `data:image/svg+xml` URLs that still contain unencoded XML.
+- Added a Playwright harness (`playwright.config.ts`, `tests/e2e/demo-flow.spec.ts`, `test:e2e`) to run demo-mode member and admin smoke tests in a local browser.
+- Updated the dashboard sidebar to allow internal scrolling on desktop-height viewports so the `Log out` control remains reachable on longer pages.
+- Expanded the Playwright member smoke flow to verify notification updates after account/transfer/payment actions and transaction search/filter empty-state behavior.

@@ -12,6 +12,10 @@ export default async function DashboardLayout({ children }: { children: React.Re
     redirect("/login");
   }
 
+  if (session.mfa.isRequired) {
+    redirect("/mfa");
+  }
+
   const snapshot = await getBankingSnapshot(session);
 
   return (

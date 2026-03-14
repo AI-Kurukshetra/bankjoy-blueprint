@@ -11,10 +11,25 @@ type AdminMonitorProps = {
   adminEvents: AdminEvent[];
   profiles: MemberProfile[];
   session: AppSession;
+  summary: {
+    highSeverityCount: number;
+    securityEventCount: number;
+    transferEventCount: number;
+    paymentEventCount: number;
+    systemEventCount: number;
+  };
   transactions: Transaction[];
 };
 
-export function AdminMonitor({ adminEvents, profiles, session, transactions }: AdminMonitorProps) {
+export function AdminMonitor({ adminEvents, profiles, session, summary, transactions }: AdminMonitorProps) {
+  const prioritizedEvents = [...adminEvents].sort((left, right) => {
+    if (left.severity !== right.severity) {
+      return left.severity === "high" ? -1 : 1;
+    }
+
+    return right.createdAt.localeCompare(left.createdAt);
+  });
+
   return (
     <div className="space-y-6">
       <section className="rounded-[34px] border border-white/70 bg-[linear-gradient(135deg,#112134_0%,#1f3550_65%,#f56f48_180%)] p-8 text-white shadow-panel">
@@ -52,7 +67,17 @@ export function AdminMonitor({ adminEvents, profiles, session, transactions }: A
         <Card>
           <Shield className="h-5 w-5 text-ember" />
           <p className="mt-4 text-sm text-muted">Flagged events</p>
-          <p className="mt-2 text-2xl font-semibold">{adminEvents.filter((event) => event.severity === "high").length}</p>
+          <p className="mt-2 text-2xl font-semibold">{summary.highSeverityCount}</p>
+        </Card>
+        <Card>
+          <p className="font-mono text-xs uppercase tracking-[0.24em] text-muted">Security</p>
+          <p className="mt-3 text-2xl font-semibold">{summary.securityEventCount}</p>
+          <p className="mt-1 text-sm text-muted">Security-linked alerts currently visible in the admin feed</p>
+        </Card>
+        <Card>
+          <p className="font-mono text-xs uppercase tracking-[0.24em] text-muted">Payments</p>
+          <p className="mt-3 text-2xl font-semibold">{summary.paymentEventCount}</p>
+          <p className="mt-1 text-sm text-muted">Bill-pay events and related money-movement alerts</p>
         </Card>
         <Card>
           <p className="font-mono text-xs uppercase tracking-[0.24em] text-muted">Last transaction</p>
@@ -63,6 +88,49 @@ export function AdminMonitor({ adminEvents, profiles, session, transactions }: A
           <p className="font-mono text-xs uppercase tracking-[0.24em] text-muted">Activity</p>
           <p className="mt-3 text-2xl font-semibold">{transactions.length}</p>
           <p className="mt-1 text-sm text-muted">Ledger rows visible to the current admin session</p>
+        </Card>
+      </section>
+      <section className="grid gap-5 xl:grid-cols-[0.8fr_1.2fr]">
+        <Card>
+          <p className="font-mono text-xs uppercase tracking-[0.24em] text-muted">Security posture</p>
+          <h2 className="mt-2 text-2xl font-semibold">Alert breakdown</h2>
+          <div className="mt-5 grid gap-3">
+            <div className="rounded-[22px] border border-line/70 bg-slate-50/95 px-5 py-4">
+              <p className="text-xs uppercase tracking-[0.18em] text-muted">Transfers</p>
+              <p className="mt-2 text-2xl font-semibold text-ink">{summary.transferEventCount}</p>
+            </div>
+            <div className="rounded-[22px] border border-line/70 bg-slate-50/95 px-5 py-4">
+              <p className="text-xs uppercase tracking-[0.18em] text-muted">Payments</p>
+              <p className="mt-2 text-2xl font-semibold text-ink">{summary.paymentEventCount}</p>
+            </div>
+            <div className="rounded-[22px] border border-line/70 bg-slate-50/95 px-5 py-4">
+              <p className="text-xs uppercase tracking-[0.18em] text-muted">System</p>
+              <p className="mt-2 text-2xl font-semibold text-ink">{summary.systemEventCount}</p>
+            </div>
+          </div>
+        </Card>
+        <Card>
+          <p className="font-mono text-xs uppercase tracking-[0.24em] text-muted">Prioritized alerts</p>
+          <h2 className="mt-2 text-2xl font-semibold">Triage queue</h2>
+          <div className="mt-5 space-y-3">
+            {prioritizedEvents.slice(0, 4).map((event) => (
+              <div key={event.id} className="rounded-[22px] border border-line/70 px-5 py-4">
+                <div className="flex items-center justify-between gap-3">
+                  <div>
+                    <p className="text-base font-semibold capitalize text-ink">{event.label}</p>
+                    <p className="mt-2 text-sm leading-6 text-muted">{event.detail}</p>
+                  </div>
+                  <div className="text-right">
+                    <Badge className="border-line bg-white text-ink">{event.kind}</Badge>
+                    <p className={event.severity === "high" ? "mt-2 text-xs uppercase tracking-[0.18em] text-ember" : "mt-2 text-xs uppercase tracking-[0.18em] text-surge"}>
+                      {event.severity}
+                    </p>
+                    <p className="mt-1 text-xs text-muted">{formatRelativeDate(event.createdAt)}</p>
+                  </div>
+                </div>
+              </div>
+            ))}
+          </div>
         </Card>
       </section>
       <section className="grid gap-5 xl:grid-cols-[0.95fr_1.15fr]">

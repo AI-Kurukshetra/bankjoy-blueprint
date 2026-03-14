@@ -1,12 +1,13 @@
 import { redirect } from "next/navigation";
 
+import { getAuthenticatedRedirectPath } from "@/lib/mfa";
 import { getActiveSession } from "@/lib/session";
 
 export default async function AuthLayout({ children }: { children: React.ReactNode }) {
   const session = await getActiveSession();
 
   if (session) {
-    redirect("/dashboard");
+    redirect(getAuthenticatedRedirectPath(session.mfa));
   }
 
   return (

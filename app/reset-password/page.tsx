@@ -5,6 +5,7 @@ import { redirect } from "next/navigation";
 import { requestPasswordResetAction } from "@/app/(auth)/actions";
 import { PasswordResetRequestForm } from "@/components/auth/password-reset-request-form";
 import { Card } from "@/components/ui/card";
+import { getAuthenticatedRedirectPath } from "@/lib/mfa";
 import { getActiveSession } from "@/lib/session";
 
 export const metadata: Metadata = {
@@ -20,7 +21,7 @@ export default async function ResetPasswordPage({
   const session = await getActiveSession();
 
   if (session) {
-    redirect("/dashboard");
+    redirect(getAuthenticatedRedirectPath(session.mfa));
   }
 
   return (

@@ -17,13 +17,17 @@
 
 ## Phase 2 - 3 Hour Expansion
 - [x] [2026-03-14 13:57] [P2] Add password reset
-- [ ] [P2] Add MFA or OAuth based on confirmed priority
+- [x] [2026-03-14 15:14] [P2] Add MFA based on confirmed priority
+- [x] [2026-03-14 16:13] [P2] Fix MFA security-page QR rendering for raw SVG/data URL payloads
+- [x] [2026-03-14 16:35] [P2] Add Playwright demo smoke coverage for member/admin flows and fix sidebar logout reachability
+- [x] [2026-03-14 16:43] [P2] Expand demo smoke coverage for notification visibility and transaction search/filter behavior
 - [x] [2026-03-14 14:52] [P2] Add account details and statements flow
-- [ ] [P2] Add external account linking
-- [ ] [P2] Add external and scheduled transfers
-- [ ] [P2] Add bill payments
-- [ ] [P2] Strengthen admin alerts and security handling
+- [x] [2026-03-14 15:18] [P2] Add external account linking
+- [x] [2026-03-14 15:25] [P2] Add external and scheduled transfers
+- [x] [2026-03-14 15:28] [P2] Add bill payments
+- [x] [2026-03-14 15:31] [P2] Strengthen admin alerts and security handling
 - [x] [2026-03-14 12:47] [P2] Create reusable branded email templates and admin preview screen for common banking emails
 
 ## Phase 3 - 1 Hour Nice To Have
+- [ ] [P3] Implement true realtime notification subscriptions; current notifications refresh on server re-render but no live client subscription exists
 - [ ] [P3] Add later nice-to-have features after user confirmation

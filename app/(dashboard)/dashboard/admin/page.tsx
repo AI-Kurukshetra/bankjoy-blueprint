@@ -27,6 +27,7 @@ export default async function AdminPage() {
       adminEvents={snapshot.adminEvents}
       profiles={snapshot.profiles}
       session={session}
+      summary={snapshot.summary}
       transactions={snapshot.transactions}
     />
   );
