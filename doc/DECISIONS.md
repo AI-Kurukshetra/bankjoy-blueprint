@@ -1,0 +1,43 @@
+# Decisions
+
+## 2026-03-14
+- The original 48-hour roadmap is replaced with a 6-hour Phase 1 build, followed by a 3-hour Phase 2 and a 1-hour Phase 3.
+  - Rationale: this matches the user-confirmed hackathon execution plan.
+- No feature is removed without explicit user confirmation.
+  - Rationale: scope sequencing is allowed, removal is not.
+- Phase 1 is optimized for the end-to-end demo flow: auth, dashboard, transactions, transfer, notifications, and admin visibility.
+  - Rationale: this is the smallest coherent banking experience for the demo.
+- The app supports a controlled demo-session mode when Supabase environment variables are absent.
+  - Rationale: Phase 1 implementation can proceed without inventing credentials while keeping the real Supabase integration path in place.
+- `pnpm typecheck` uses `tsconfig.typecheck.json` rather than Next's rewritten `tsconfig.json`.
+  - Rationale: Next 15's lint tooling mutates `tsconfig.json` to include transient `.next/types` entries that make plain `tsc` unreliable on a fresh checkout.
+- Supabase connectivity verification uses a publishable-key table request rather than the schema root endpoint.
+  - Rationale: the Data API schema root is expected to reject publishable keys, while project table queries prove the env values and API connection are valid.
+- Authorization stays in `public.profiles.role` with two roles: `member` and `admin`.
+  - Rationale: this keeps role checks explicit, queryable, and aligned with the agreed scope.
+- Internal transfers are executed through a database `security definer` function rather than client-side multi-step writes.
+  - Rationale: balance updates, transfer records, ledger rows, notifications, and admin alerts need to succeed atomically.
+- Demo auth users are seeded directly into `auth.users` and `auth.identities` with deterministic UUIDs.
+  - Rationale: the hackathon demo needs stable admin and member credentials plus reproducible public-table seed data.
+- Admin navigation and the `/dashboard/admin` route are both gated by the session role.
+  - Rationale: menu visibility alone is not authorization, and members should not see operator-only controls in the UI.
+- User-facing copy should read like a production banking product and avoid internal delivery language.
+  - Rationale: terms like `hackathon`, `phase`, `demo`, and `MVP` reduce trust and make the interface feel unfinished.
+- Email content is generated from a single HTML layout function with common banking templates layered on top.
+  - Rationale: account, transfer, security, and document emails should share branding, spacing, and structure rather than diverging template-by-template.
+- The root layout suppresses hydration warnings on `html` and `body`.
+  - Rationale: browser extensions can inject client-only attributes before hydration, creating false-positive mismatches unrelated to application state.
+- Auth route protection runs in the shared auth layout, not separately on each page.
+  - Rationale: one redirect check keeps `/login` and `/signup` behavior consistent and prevents signed-in users from seeing public auth screens.
+- Password reset is split into a public request route and a separate recovery-update route.
+  - Rationale: the request page should behave like other public auth entry points, while the update page must remain accessible long enough to exchange a Supabase recovery link for a valid session.
+- Password recovery confirmation is handled by a server-side `token_hash` verification route.
+  - Rationale: Supabase SSR recovery flows are more reliable when the email template sends `token_hash` to a server endpoint that calls `verifyOtp`, rather than relying on a browser-side PKCE code verifier after the email redirect.
+- Infrastructure vendors should not appear in user-facing copy unless the user explicitly asks for technical detail.
+  - Rationale: customer-facing banking screens should reinforce the Bankjoy brand and product language rather than exposing backend implementation choices.
+- Hosted authentication email content should be previewable in-app as both rendered output and source HTML.
+  - Rationale: operators need to verify the actual inbox appearance while still having a copy-safe template for the hosted email configuration.
+- Password recovery should support both hosted `token_hash` links and older/default links that arrive with a recovery `code`.
+  - Rationale: the app should not depend on one exact hosted email template shape just to complete a reset; recovery handoff should be resilient to both supported link styles.
+- Statement downloads are generated on demand from statement metadata plus the account ledger instead of linking to static files.
+  - Rationale: the MVP can provide a real account-download flow without depending on storage uploads or pre-generated documents, while still enforcing session-based access control.

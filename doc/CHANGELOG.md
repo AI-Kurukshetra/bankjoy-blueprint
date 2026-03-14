@@ -1,0 +1,39 @@
+# Changelog
+
+## 2026-03-14
+- Added project documentation baseline in `/doc`.
+- Captured the 6-hour core build, 3-hour expansion phase, and 1-hour nice-to-have phase.
+- Scaffolded a Next.js 15 + Tailwind v3 application with protected auth and dashboard route structure.
+- Added Supabase SSR client utilities, middleware session refresh, `.env.example`, and an initial MVP SQL migration.
+- Implemented Phase 1 UI for login, signup, dashboard overview, transactions, transfers, notifications, and admin monitoring.
+- Added loading skeletons, error boundaries, and unit test coverage for shared formatting utilities.
+- Verified live Supabase connectivity from `.env` using the publishable key and a direct `accounts` table request.
+- Added a second migration for role-aware RLS, profile auto-provisioning on signup, a live internal-transfer SQL function, and seeded admin/member demo data.
+- Updated the Next.js app to read real Supabase data when env is present while preserving demo-mode fallback when env is missing.
+- Verified seeded password sign-in for member and admin accounts, confirmed RLS visibility rules, and exercised the live transfer RPC successfully.
+- Reworked the desktop UI shell to use a wider canvas with a stronger top workspace band, improved side rails, and less unused horizontal space.
+- Redesigned the overview, transactions, transfers, and admin screens to use broader grids and more operational dashboard patterns.
+- Tightened responsive grid breakpoints to prevent mid-width overlap and hid admin navigation/access for non-admin members.
+- Replaced top-band flex layouts with explicit grid columns in the shell and major dashboard pages to eliminate hero-card overlap at common desktop widths.
+- Rewrote user-facing product copy and metadata to remove prototype language such as `hackathon`, `phase`, `demo`, and `MVP`.
+- Added `lib/email/templates.ts` with a reusable Bankjoy HTML email layout and common templates for welcome, password reset, transfer confirmation, security alert, and statement-ready emails.
+- Added an admin-only preview page for email templates at `/dashboard/admin/emails`.
+- Added unit tests for email template generation and escaping.
+- Added `suppressHydrationWarning` to the root `html` and `body` elements to avoid false hydration errors from browser-injected extension attributes.
+- Updated the auth layout to redirect active sessions away from `/login` and `/signup` to `/dashboard`.
+- Added password reset request and update routes at `/reset-password` and `/reset-password/update`.
+- Added reset-password server actions, recovery-link session handling, and validation tests for reset schemas.
+- Added a login-page reset link and redirected active sessions away from the reset request page.
+- Added a server-side `/auth/confirm` route that verifies `token_hash` with Supabase and writes recovery-session cookies before redirecting to the password update screen.
+- Removed the client-side recovery PKCE exchange flow that was triggering missing code-verifier errors.
+- Added [doc/SUPABASE_AUTH_EMAILS.md](/Users/parthgajjar/Sites/localhost/bankjoy_blueprint_20260310_141525/doc/SUPABASE_AUTH_EMAILS.md) with the required recovery email template snippet for Supabase Auth.
+- Replaced the minimal recovery email snippet with a full Bankjoy-branded HTML reset template for direct use in the Supabase Dashboard.
+- Added the hosted Supabase reset-password template HTML to the admin email preview page for in-app copy/paste access.
+- Removed remaining user-facing platform references from auth, email, and reset screens.
+- Updated dashboard metadata titles to use `Bankjoy` instead of legacy blueprint naming.
+- Replaced sample-style placeholders and seeded event text with more production-like customer copy.
+- Updated the admin email preview page to render the hosted password reset template as a live email preview in addition to the raw HTML source.
+- Updated the password reset flow so `/reset-password/update` accepts recovery query parameters and forwards them to the server-side confirmation route before rendering the password form.
+- Added `supabase/migrations/20260314145000_add_statements_and_account_downloads.sql` to create the `statements` table, add RLS, and seed statement metadata for the existing accounts.
+- Added an `Accounts` dashboard route with account-level summaries, recent activity, and statement download controls.
+- Added `app/api/statements/[statementId]/route.ts` and `lib/statements.ts` to generate secure CSV statement downloads from account and transaction data.
