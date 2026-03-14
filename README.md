@@ -158,3 +158,7 @@ The current repository state has been verified with:
 - `pnpm typecheck`
 - `pnpm test`
 - `pnpm test:e2e`
+
+## Demo Video Artifact
+
+- [artifacts/bankjoy-full-demo-captioned.webm](/Users/parthgajjar/Sites/localhost/bankjoy_blueprint_20260310_141525/artifacts/bankjoy-full-demo-captioned.webm)
