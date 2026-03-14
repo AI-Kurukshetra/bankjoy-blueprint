@@ -125,9 +125,11 @@ pnpm lint
 pnpm typecheck
 pnpm test
 pnpm test:e2e
+pnpm test:e2e:demo
 ```
 
 `pnpm test:e2e` runs the Playwright smoke suite against demo mode and overrides the public Supabase env vars to empty strings on purpose.
+`pnpm test:e2e:demo` runs a slower headed browser walkthrough with on-screen captions and saves a Playwright video under `test-results/demo-video/`.
 
 ## Important behavior
 
@@ -135,6 +137,18 @@ pnpm test:e2e
 - When Supabase env vars are present, auth and data come from Supabase and RLS policies apply.
 - Password reset uses the server-side confirmation flow in [app/auth/confirm/route.ts](/Users/parthgajjar/Sites/localhost/bankjoy_blueprint_20260310_141525/app/auth/confirm/route.ts).
 - Hosted reset email template guidance is documented in [doc/SUPABASE_AUTH_EMAILS.md](/Users/parthgajjar/Sites/localhost/bankjoy_blueprint_20260310_141525/doc/SUPABASE_AUTH_EMAILS.md).
+
+## Deploy to Vercel
+
+The repository remote already points at GitHub: `AI-Kurukshetra/bankjoy-blueprint`.
+
+1. Import that repository into Vercel and let it auto-detect `Next.js`.
+2. Add `NEXT_PUBLIC_SUPABASE_URL` and `NEXT_PUBLIC_SUPABASE_PUBLISHABLE_KEY` to Vercel.
+3. Set `NEXT_PUBLIC_APP_URL` for the `Production` environment if you want password reset and email links to use your custom domain.
+4. In Vercel, enable automatic system environment variables so preview and production deployments expose deployment URLs.
+5. In Supabase Auth URL Configuration, set the production Site URL and add both your production URL and the Vercel preview wildcard to Redirect URLs.
+
+The full checklist is in [doc/DEPLOYMENT.md](/Users/parthgajjar/Sites/localhost/bankjoy_blueprint_20260310_141525/doc/DEPLOYMENT.md).
 
 ## Verification
 

@@ -65,3 +65,11 @@
   - Rationale: the browser smoke suite is intended to validate the repo's demo-mode user journeys deterministically, without depending on whichever live Supabase credentials may exist in the local shell or `.env` files.
 - Notification coverage is currently validated as fetch/refresh behavior, not true realtime delivery.
   - Rationale: there is no client-side subscription code for notifications in the repository today, so tests should assert the implemented server-render refresh behavior and track websocket-style live notifications as a separate follow-up task.
+- Production-facing auth and email links should resolve from an explicit app URL first, then Vercel deployment URLs, instead of defaulting directly to localhost.
+  - Rationale: Vercel deployments need correct password reset and hosted-auth redirects in both preview and production, while local development still needs a safe localhost fallback.
+- Demo-recording automation should live in a separate Playwright config and spec rather than changing the main E2E smoke suite.
+  - Rationale: the normal browser checks need to stay fast and headless for validation, while a demo artifact needs slower pacing, a visible browser, and video capture.
+- Silent demo clips should communicate context through in-video captions rather than depending on voice-over.
+  - Rationale: a captioned walkthrough is easier to reuse across viewers, avoids audio tooling requirements in the current environment, and still explains each feature while the browser flow is running.
+- The reusable demo recording target is 1920x1080 with caption styles sized specifically for 1080p playback.
+  - Rationale: higher-resolution output is clearer for stakeholder playback, screen sharing, and downstream editing than the previous 1280x720 recording.

@@ -56,3 +56,12 @@
 - Added a Playwright harness (`playwright.config.ts`, `tests/e2e/demo-flow.spec.ts`, `test:e2e`) to run demo-mode member and admin smoke tests in a local browser.
 - Updated the dashboard sidebar to allow internal scrolling on desktop-height viewports so the `Log out` control remains reachable on longer pages.
 - Expanded the Playwright member smoke flow to verify notification updates after account/transfer/payment actions and transaction search/filter empty-state behavior.
+- Added `lib/app-url.ts` so password reset and email links can resolve correctly on Vercel production and preview deployments instead of falling back to localhost.
+- Expanded `.env.example` and `types/env.d.ts` with deployment-related app URL and Vercel system environment variables.
+- Added [doc/DEPLOYMENT.md](/Users/parthgajjar/Sites/localhost/bankjoy_blueprint_20260310_141525/doc/DEPLOYMENT.md) and a Vercel deployment section in [README.md](/Users/parthgajjar/Sites/localhost/bankjoy_blueprint_20260310_141525/README.md).
+- Added `playwright.demo.config.ts`, `tests/e2e/demo-video.spec.ts`, and `pnpm test:e2e:demo` to produce a slower headed demo walkthrough with Playwright video output.
+- Expanded the demo video walkthrough to include on-screen captions and a single end-to-end member/admin showcase covering accounts, statements, linked external accounts, transfers, bill payments, transactions, security, admin monitoring, and admin email previews.
+- Re-ran Playwright member/admin UI smoke coverage (`tests/e2e/demo-flow.spec.ts`) and confirmed both core UI journeys pass.
+- Upgraded demo recording resolution to 1920x1080 in `playwright.demo.config.ts`.
+- Tuned caption overlay spacing and typography in `tests/e2e/demo-video.spec.ts` for readability at 1080p output.
+- Added [doc/PERMISSIONS.md](/Users/parthgajjar/Sites/localhost/bankjoy_blueprint_20260310_141525/doc/PERMISSIONS.md) documenting all approved command prefixes currently active for this workspace/session.

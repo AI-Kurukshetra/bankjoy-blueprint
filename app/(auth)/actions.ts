@@ -4,6 +4,7 @@ import { cookies } from "next/headers";
 import { redirect } from "next/navigation";
 
 import { submitTransferAction } from "@/app/(dashboard)/actions";
+import { getAppUrl } from "@/lib/app-url";
 import { DEMO_SESSION_COOKIE } from "@/lib/session";
 import { getAuthenticatedRedirectPath, getMfaState } from "@/lib/mfa";
 import { hasSupabaseEnv } from "@/lib/supabase/env";
@@ -138,7 +139,7 @@ export async function requestPasswordResetAction(formData: FormData) {
 
   if (hasSupabaseEnv()) {
     const supabase = await createClient();
-    const appUrl = process.env.NEXT_PUBLIC_APP_URL ?? "http://localhost:3000";
+    const appUrl = getAppUrl();
     const { error } = await supabase.auth.resetPasswordForEmail(parsed.data.email, {
       redirectTo: `${appUrl}/reset-password/update`,
     });

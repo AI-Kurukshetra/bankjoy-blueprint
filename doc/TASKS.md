@@ -29,5 +29,10 @@
 - [x] [2026-03-14 12:47] [P2] Create reusable branded email templates and admin preview screen for common banking emails
 
 ## Phase 3 - 1 Hour Nice To Have
+- [x] [2026-03-14 17:05] [Ops] Prepare Vercel deployment configuration and deployment runbook
+- [x] [2026-03-14 17:40] [Ops] Add a dedicated Playwright demo-video walkthrough flow
+- [x] [2026-03-14 17:49] [Ops] Expand the demo walkthrough into a single captioned member-plus-admin showcase clip
+- [x] [2026-03-14 18:25] [Ops] Re-run UI E2E smoke coverage across member/admin screens and regenerate captioned demo video in 1080p
+- [x] [2026-03-14 18:38] [Ops] Add a persisted inventory of approved command permissions
 - [ ] [P3] Implement true realtime notification subscriptions; current notifications refresh on server re-render but no live client subscription exists
 - [ ] [P3] Add later nice-to-have features after user confirmation

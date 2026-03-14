@@ -1,3 +1,5 @@
+import { getAppUrl } from "@/lib/app-url";
+
 type EmailMetricTone = "default" | "accent" | "warning";
 
 type EmailMetric = {
@@ -38,7 +40,7 @@ export type CommonEmailTemplate = {
   html: string;
 };
 
-const APP_URL = process.env.NEXT_PUBLIC_APP_URL ?? "http://localhost:3000";
+const APP_URL = getAppUrl();
 
 export const hostedResetTemplateHtml = `<!doctype html>
 <html lang="en">

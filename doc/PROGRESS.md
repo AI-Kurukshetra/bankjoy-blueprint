@@ -29,3 +29,8 @@
 [2026-03-14 16:35] codex — Added Playwright demo smoke tests for member/admin browser flows, forced the E2E web server into demo mode, fixed desktop sidebar overflow so logout remains reachable, and verified lint, typecheck, and Playwright passes.
 [2026-03-14 16:43] codex — Expanded demo Playwright coverage to assert notification visibility and transaction search/filter behavior, and confirmed notifications are server-refreshed rather than true realtime subscriptions.
 [2026-03-14 16:55] codex — Re-ran lint, typecheck, unit tests, and Playwright demo smoke coverage on the full Phase 2 change set before committing and pushing.
+[2026-03-14 17:05] codex — Added Vercel deployment documentation, completed the missing production app-URL env wiring, and prepared the Supabase/Vercel redirect configuration checklist.
+[2026-03-14 17:40] codex — Added a dedicated headed Playwright demo-video flow with slower walkthrough pacing and saved-video output for reusable demo recordings.
+[2026-03-14 17:49] codex — Expanded the demo recorder into one captioned member/admin walkthrough covering dashboard, accounts, statements, transfers, payments, transactions, security, admin monitor, and email previews.
+[2026-03-14 18:25] codex — Re-ran Playwright UI smoke tests across member/admin screens (pass), upgraded demo-video recording output to 1920x1080 with scaled captions, and generated a fresh high-resolution walkthrough video.
+[2026-03-14 18:38] codex — Added `doc/PERMISSIONS.md` with all currently approved command prefixes (existing and session-added) for explicit permission tracking.
