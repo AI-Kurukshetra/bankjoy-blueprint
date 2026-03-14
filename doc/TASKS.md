@@ -34,5 +34,6 @@
 - [x] [2026-03-14 17:49] [Ops] Expand the demo walkthrough into a single captioned member-plus-admin showcase clip
 - [x] [2026-03-14 18:25] [Ops] Re-run UI E2E smoke coverage across member/admin screens and regenerate captioned demo video in 1080p
 - [x] [2026-03-14 18:38] [Ops] Add a persisted inventory of approved command permissions
+- [x] [2026-03-14 18:49] [Ops] Deploy current local state to Vercel production
 - [ ] [P3] Implement true realtime notification subscriptions; current notifications refresh on server re-render but no live client subscription exists
 - [ ] [P3] Add later nice-to-have features after user confirmation

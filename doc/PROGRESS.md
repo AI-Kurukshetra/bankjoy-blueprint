@@ -34,3 +34,4 @@
 [2026-03-14 17:49] codex — Expanded the demo recorder into one captioned member/admin walkthrough covering dashboard, accounts, statements, transfers, payments, transactions, security, admin monitor, and email previews.
 [2026-03-14 18:25] codex — Re-ran Playwright UI smoke tests across member/admin screens (pass), upgraded demo-video recording output to 1920x1080 with scaled captions, and generated a fresh high-resolution walkthrough video.
 [2026-03-14 18:38] codex — Added `doc/PERMISSIONS.md` with all currently approved command prefixes (existing and session-added) for explicit permission tracking.
+[2026-03-14 18:49] codex — Deployed the current local state to Vercel production and verified the build completed successfully.
